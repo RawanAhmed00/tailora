@@ -1,0 +1,15 @@
+[33m9397513[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mAmmar[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: reset: moving to HEAD
+[33m9397513[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mAmmar[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{1}: merge origin/main: Fast-forward
+[33m19b1c73[m[33m ([m[1;31morigin/Ammar[m[33m)[m HEAD@{2}: checkout: moving from Ammar to Ammar
+[33m19b1c73[m[33m ([m[1;31morigin/Ammar[m[33m)[m HEAD@{3}: reset: moving to HEAD
+[33m19b1c73[m[33m ([m[1;31morigin/Ammar[m[33m)[m HEAD@{4}: commit: marge
+[33md35f7d2[m HEAD@{5}: commit (merge): marge auth
+[33m4b38ed8[m[33m ([m[1;31morigin/feature/website-settings[m[33m)[m HEAD@{6}: Branch: renamed refs/heads/feature/website-settings to refs/heads/Ammar
+[33m4b38ed8[m[33m ([m[1;31morigin/feature/website-settings[m[33m)[m HEAD@{8}: reset: moving to HEAD
+[33m4b38ed8[m[33m ([m[1;31morigin/feature/website-settings[m[33m)[m HEAD@{9}: checkout: moving from feature/website-settings to feature/website-settings
+[33m4b38ed8[m[33m ([m[1;31morigin/feature/website-settings[m[33m)[m HEAD@{10}: commit: Add website settings CRUD with image upload
+[33m79c54fc[m[33m ([m[1;32mmain[m[33m)[m HEAD@{11}: checkout: moving from main to feature/website-settings
+[33m79c54fc[m[33m ([m[1;32mmain[m[33m)[m HEAD@{12}: checkout: moving from main to main
+[33m79c54fc[m[33m ([m[1;32mmain[m[33m)[m HEAD@{13}: commit: Add api.php
+[33mae5346d[m HEAD@{14}: commit: Add website settings and contact messages
+[33m07842da[m[33m ([m[1;31morigin/rola[m[33m, [m[1;31morigin/Remas[m[33m)[m HEAD@{15}: clone: from https://github.com/remasayman765-lang/case1

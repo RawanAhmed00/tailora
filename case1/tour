@@ -1,0 +1,208 @@
+/* Tailora Tour Guide — Request Detail page.
+   Reads ?id= from the URL, loads the request via getRequest(id),
+   renders details, and provides Accept/Reject actions. */
+(function () {
+  "use strict";
+
+  document.addEventListener("DOMContentLoaded", async function () {
+    const P = window.TL && window.TL.Pages ? window.TL.Pages : null;
+
+    /* ------------------------------------------------------------------
+       SAFETY HELPERS
+       ------------------------------------------------------------------ */
+    function escape(value) {
+      if (P && typeof P.escape === "function") return P.escape(value);
+      const d = document.createElement("div");
+      d.textContent = value == null ? "" : String(value);
+      return d.innerHTML;
+    }
+
+    function display(value, fallback) {
+      if (P && typeof P.display === "function") return P.display(value);
+      if (value === null || value === undefined || value === "") return fallback || "—";
+      return String(value);
+    }
+
+    function money(value) {
+      if (P && typeof P.money === "function") return P.money(value);
+      if (value === null || value === undefined || value === "") return "—";
+      return "$" + Number(value).toLocaleString();
+    }
+
+    function date(value) {
+      if (P && typeof P.date === "function") return P.date(value);
+      if (!value) return "—";
+      const d = new Date(value);
+      return isNaN(d.getTime()) ? String(value) : d.toLocaleDateString();
+    }
+
+    function badge(value) {
+      if (P && typeof P.badge === "function") return P.badge(value);
+      return `<span class="tl-badge tl-badge--neutral">${escape(value)}</span>`;
+    }
+
+    function empty(title, desc, icon) {
+      if (P && typeof P.empty === "function") return P.empty(title, desc, icon);
+      return `<div class="tl-empty"><div class="tl-empty__icon"><i class="bi ${icon || "bi-database-x"}"></i></div><div class="tl-empty__title">${escape(title || "Data unavailable")}</div><p class="tl-empty__desc">${escape(desc || "")}</p></div>`;
+    }
+
+    function error(message) {
+      if (P && typeof P.error === "function") return P.error(message);
+      return empty("Unable to load data", message || "The request failed. Please try again.");
+    }
+
+    /* ------------------------------------------------------------------
+       ELEMENTS
+       ------------------------------------------------------------------ */
+    const container = document.getElementById("requestDetailContainer");
+    const subtitle = document.getElementById("reqSubtitle");
+
+    /* ------------------------------------------------------------------
+       GET ID FROM URL
+       ------------------------------------------------------------------ */
+    const params = new URLSearchParams(window.location.search);
+    const requestId = params.get("id");
+
+    if (!requestId) {
+      if (container) container.innerHTML = error("No request ID was provided in the URL.");
+      if (subtitle) subtitle.textContent = "Missing request ID.";
+      return;
+    }
+
+    if (!window.TL || !window.TL.TourGuide) {
+      if (container) container.innerHTML = error("TourGuide API module is not loaded.");
+      return;
+    }
+
+    /* ------------------------------------------------------------------
+       RENDER DETAIL
+       ------------------------------------------------------------------ */
+    function renderDetail(req) {
+      const booking = req.booking || {};
+      const user = booking.user || {};
+      const trip = booking.trip || req.trip || {};
+      const status = req.status || "pending";
+
+      const rows = [
+        ["Request ID", escape(req.id)],
+        ["Status", badge(status)],
+        ["Traveler", escape(user.name || "Unknown traveler")],
+        ["Email", escape(user.email || "—")],
+        ["Phone", escape(user.phone || user.phone_number || "—")],
+        ["Trip", escape(trip.title || trip.name || "—")],
+        ["Start Date", date(booking.start_date || booking.date || req.start_date)],
+        ["End Date", date(booking.end_date || req.end_date)],
+        ["Price", money(req.price ?? booking.price)],
+        ["Notes", escape(req.notes || req.message || booking.notes || "—")]
+      ];
+
+      const detailRows = rows.map(function (row) {
+        return `
+          <div class="tl-detail-row">
+            <span class="tl-detail-row__label">${row[0]}</span>
+            <span class="tl-detail-row__value">${row[1]}</span>
+          </div>`;
+      }).join("");
+
+      const isPending = String(status).toLowerCase() === "pending";
+
+      const actions = isPending ? `
+        <div class="tl-flex tl-gap-sm" style="margin-top:20px;flex-wrap:wrap;">
+          <button type="button" class="tl-btn tl-btn--success" id="acceptRequestBtn">
+            <i class="bi bi-check-lg"></i>&nbsp;Accept
+          </button>
+          <button type="button" class="tl-btn tl-btn--danger" id="rejectRequestBtn">
+            <i class="bi bi-x-lg"></i>&nbsp;Reject
+          </button>
+        </div>` : "";
+
+      return `
+        <div class="tl-card">
+          <div class="tl-card__head">
+            <span class="tl-label">Request Details</span>
+            ${badge(status)}
+          </div>
+          ${detailRows}
+          ${actions}
+        </div>`;
+    }
+
+    /* ------------------------------------------------------------------
+       ACCEPT / REJECT
+       ------------------------------------------------------------------ */
+    function wireActions(req) {
+      const acceptBtn = document.getElementById("acceptRequestBtn");
+      const rejectBtn = document.getElementById("rejectRequestBtn");
+
+      if (acceptBtn) {
+        acceptBtn.addEventListener("click", async function () {
+          if (!P || !P.confirm || P.confirm("Accept this booking request?")) {
+            if (P && P.setBusy) P.setBusy(acceptBtn, true);
+            try {
+              await window.TL.TourGuide.acceptRequest(req.id);
+              if (window.TL.showToast) window.TL.showToast("Request accepted.", "success");
+              window.location.reload();
+            } catch (err) {
+              console.error("Accept request error:", err);
+              if (window.TL.showToast) window.TL.showToast(err.message || "Failed to accept request.", "error");
+              if (P && P.setBusy) P.setBusy(acceptBtn, false);
+            }
+          }
+        });
+      }
+
+      if (rejectBtn) {
+        rejectBtn.addEventListener("click", async function () {
+          if (!P || !P.confirm || P.confirm("Reject this booking request?")) {
+            if (P && P.setBusy) P.setBusy(rejectBtn, true);
+            try {
+              await window.TL.TourGuide.rejectRequest(req.id);
+              if (window.TL.showToast) window.TL.showToast("Request rejected.", "success");
+              window.location.reload();
+            } catch (err) {
+              console.error("Reject request error:", err);
+              if (window.TL.showToast) window.TL.showToast(err.message || "Failed to reject request.", "error");
+              if (P && P.setBusy) P.setBusy(rejectBtn, false);
+            }
+          }
+        });
+      }
+    }
+
+    /* ------------------------------------------------------------------
+       LOAD
+       ------------------------------------------------------------------ */
+    async function load() {
+      if (container) {
+        container.innerHTML = `
+          <div class="tl-card">
+            <div class="tl-empty">
+              <div class="tl-empty__icon"><i class="bi bi-arrow-repeat"></i></div>
+              <div class="tl-empty__title">Loading request…</div>
+              <p class="tl-empty__desc">Fetching request details.</p>
+            </div>
+          </div>`;
+      }
+
+      try {
+        const response = await window.TL.TourGuide.getRequest(requestId);
+        const data = response && typeof response === "object" && Object.prototype.hasOwnProperty.call(response, "data")
+          ? (response.data || response)
+          : response;
+        const req = data && typeof data === "object" && Object.prototype.hasOwnProperty.call(data, "data")
+          ? (data.data || data)
+          : data;
+
+        if (subtitle) subtitle.textContent = "Request #" + (req.id || requestId);
+        if (container) container.innerHTML = renderDetail(req);
+        wireActions(req);
+      } catch (err) {
+        console.error("Request detail error:", err);
+        if (subtitle) subtitle.textContent = "Failed to load request.";
+        if (container) container.innerHTML = error(err.message || "Failed to load request details.");
+      }
+    }
+
+    load();
+  });
+})();
