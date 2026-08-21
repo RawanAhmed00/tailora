@@ -9,7 +9,7 @@
 
   const API_CONFIG = {
     get baseUrl() {
-      return (window.ENV && window.ENV.API_URL) ? window.ENV.API_URL : "http://127.0.0.1:8000/api";
+      return (window.ENV && window.ENV.API_URL) ? window.ENV.API_URL : "https://tailora-production-d349.up.railway.app/api";
     },
     tokenKey: "tailora_guide_token",
     userKey: "tailora_guide_user"
