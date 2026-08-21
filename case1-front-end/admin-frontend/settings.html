@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>try{var t=localStorage.getItem('tailora_theme')||'dark';document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Settings — Tailora Admin</title>
+
+  <link rel="icon" type="image/png" href="images/logo.png">
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Tailora Design System -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+
+<body
+  data-page="settings"
+  data-page-title="Website Settings"
+  data-breadcrumb="Insights & System, Website Settings"
+  data-requires-auth="true"
+>
+
+  <div class="tl-app">
+    <aside class="tl-sidebar" id="tlSidebar" aria-label="Sidebar navigation"></aside>
+
+    <div class="tl-main">
+      <header class="tl-topbar" id="tlTopbar"></header>
+
+      <main class="tl-content">
+        <!-- Page Header -->
+        <div class="tl-page-header">
+          <div>
+            <div class="tl-eyebrow">
+              <span class="tl-badge tl-badge--info">
+                <i class="bi bi-gear"></i> System Configuration
+              </span>
+            </div>
+            <h1 class="tl-page-title">Website Settings</h1>
+            <p class="tl-text-secondary">
+              Configure global branding, contact details, and social media channels.
+            </p>
+          </div>
+
+          <button id="settingsDeleteBtn" class="tl-btn tl-btn--danger" type="button" title="Delete current website settings">
+            <i class="bi bi-trash"></i> Delete current settings
+          </button>
+        </div>
+
+        <!-- Form Layout -->
+        <form id="settingsForm" novalidate>
+          <div class="row g-4">
+            
+            <!-- Left Column: Site Info & Media -->
+            <div class="col-lg-7">
+              <section class="tl-card mb-4">
+                <div class="tl-card__head">
+                  <div>
+                    <h2 class="tl-section-title">General Information</h2>
+                    <span class="tl-metadata">Core website identity & contact channels</span>
+                  </div>
+                  <i class="bi bi-globe tl-card-icon"></i>
+                </div>
+
+                <div class="row g-3">
+                  <!-- Site Name -->
+                  <div class="col-md-6">
+                    <div class="tl-field">
+                      <label for="site_name">Site Name <span class="text-danger">*</span></label>
+                      <input id="site_name" name="site_name" type="text" class="tl-input" placeholder="e.g. Tailora Travel" required>
+                      <div class="tl-field-error" data-error-for="site_name"></div>
+                    </div>
+                  </div>
+
+                  <!-- Contact Email -->
+                  <div class="col-md-6">
+                    <div class="tl-field">
+                      <label for="email">Contact Email</label>
+                      <input id="email" name="email" type="email" class="tl-input" placeholder="contact@tailora.com">
+                      <div class="tl-field-error" data-error-for="email"></div>
+                    </div>
+                  </div>
+
+                  <!-- Phone Number -->
+                  <div class="col-md-6">
+                    <div class="tl-field">
+                      <label for="phone">Phone Number</label>
+                      <input id="phone" name="phone" type="text" class="tl-input" placeholder="+1 (555) 000-0000">
+                      <div class="tl-field-error" data-error-for="phone"></div>
+                    </div>
+                  </div>
+
+                  <!-- Address -->
+                  <div class="col-md-6">
+                    <div class="tl-field">
+                      <label for="address">Address</label>
+                      <input id="address" name="address" type="text" class="tl-input" placeholder="e.g. Cairo, Egypt">
+                      <div class="tl-field-error" data-error-for="address"></div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Media & Branding Card -->
+              <section class="tl-card">
+                <div class="tl-card__head">
+                  <div>
+                    <h2 class="tl-section-title">Media & Branding</h2>
+                    <span class="tl-metadata">Upload official logos and banner imagery</span>
+                  </div>
+                  <i class="bi bi-image tl-card-icon"></i>
+                </div>
+
+                <div class="row g-3">
+                  <!-- Logo Upload -->
+                  <div class="col-md-6">
+                    <div class="tl-field">
+                      <label for="logo">Site Logo</label>
+                      <input id="logo" name="logo" type="file" class="tl-input" accept="image/*">
+                      <div class="tl-field-error" data-error-for="logo"></div>
+                      <div class="mt-2 text-center p-2 rounded" style="background: var(--tl-bg-elevated); border: 1px dashed var(--tl-border);">
+                        <img id="logoPreview" src="" alt="Logo preview" style="max-height: 80px; max-width: 100%; display: none; margin: 0 auto; object-fit: contain;">
+                        <span id="logoPlaceholder" class="tl-metadata d-block py-2">No logo chosen</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Homepage Banner Upload -->
+                  <div class="col-md-6">
+                    <div class="tl-field">
+                      <label for="homepage_banner">Homepage Banner</label>
+                      <input id="homepage_banner" name="homepage_banner" type="file" class="tl-input" accept="image/*">
+                      <div class="tl-field-error" data-error-for="homepage_banner"></div>
+                      <div class="mt-2 text-center p-2 rounded" style="background: var(--tl-bg-elevated); border: 1px dashed var(--tl-border);">
+                        <img id="bannerPreview" src="" alt="Banner preview" style="max-height: 80px; max-width: 100%; display: none; margin: 0 auto; object-fit: cover;">
+                        <span id="bannerPlaceholder" class="tl-metadata d-block py-2">No banner chosen</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <!-- Right Column: Social Media Links & Actions -->
+            <div class="col-lg-5">
+              <section class="tl-card h-100 d-flex flex-column">
+                <div class="tl-card__head">
+                  <div>
+                    <h2 class="tl-section-title">Social Media Channels</h2>
+                    <span class="tl-metadata">Connect social profiles</span>
+                  </div>
+                  <i class="bi bi-share tl-card-icon"></i>
+                </div>
+
+                <div class="flex-grow-1">
+                  <div id="socialMediaLinksContainer" class="mb-3">
+                    <!-- Dynamic rows injected here -->
+                  </div>
+
+                  <button type="button" id="addSocialMediaBtn" class="tl-btn tl-btn--outline tl-btn--sm w-100 mb-4">
+                    <i class="bi bi-plus-lg"></i> Add Social Link
+                  </button>
+                  <div class="tl-field-error mb-3" data-error-for="social_media_links"></div>
+                </div>
+
+                <hr class="tl-divider my-3">
+
+                <!-- Actions -->
+                <div class="d-flex flex-column gap-2">
+                  <button type="submit" id="settingsSaveBtn" class="tl-btn tl-btn--primary w-100 py-2">
+                    <i class="bi bi-check2-circle"></i> Save Settings
+                  </button>
+                </div>
+              </section>
+            </div>
+
+          </div>
+        </form>
+      </main>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core API Modules -->
+  <script src="assets/js/api/api.js"></script>
+  <script src="assets/js/api/auth.js"></script>
+  <script src="assets/js/api/settings.js"></script>
+
+  <!-- Shared App & Pages -->
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/pages/utils.js"></script>
+  <script src="assets/js/pages/settings.js"></script>
+</body>
+</html>

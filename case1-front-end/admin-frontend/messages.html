@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>try{var t=localStorage.getItem('tailora_theme')||'dark';document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Messages — Tailora Admin</title>
+
+  <link rel="icon" type="image/png" href="images/logo.png">
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Tailora Design System -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+
+<body data-page="messages" data-page-title="Contact Messages" data-breadcrumb="Management, Contact Messages"
+  data-requires-auth="true">
+
+  <div class="tl-app">
+    <aside class="tl-sidebar" id="tlSidebar" aria-label="Sidebar navigation"></aside>
+
+    <div class="tl-main">
+      <header class="tl-topbar" id="tlTopbar"></header>
+
+      <main class="tl-content">
+        <!-- Page Header -->
+        <div class="tl-page-header">
+          <div>
+            <div class="tl-eyebrow">
+              <span class="tl-badge tl-badge--info">
+                <i class="bi bi-envelope"></i> Communication
+              </span>
+            </div>
+            <h1 class="tl-page-title">Contact Messages</h1>
+            <p class="tl-text-secondary">
+              View inquiries and messages sent by users and website visitors.
+            </p>
+          </div>
+
+          <button id="messagesRefresh" class="tl-btn tl-btn--outline" type="button">
+            <i class="bi bi-arrow-clockwise"></i> Refresh
+          </button>
+        </div>
+
+        <!-- Messages Table Card -->
+        <section class="tl-card tl-card--flush">
+          <div class="tl-card__head" style="padding: 24px 24px 0;">
+            <div>
+              <h2 class="tl-section-title">Inbox Messages</h2>
+              <span class="tl-metadata">Recent user inquiries</span>
+            </div>
+          </div>
+
+          <div id="messagesState" style="padding: 0 24px 24px;"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODALS (Placed directly at root body level)
+       ========================================================================= -->
+
+  <!-- View Message Content Modal -->
+  <div class="modal fade" id="messageViewModal" tabindex="-1" aria-labelledby="messageViewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content tl-modal">
+        <div class="modal-header">
+          <div class="d-flex align-items-center gap-2">
+            <span class="tl-badge tl-badge--info"><i class="bi bi-envelope-open"></i> Message</span>
+            <h5 class="modal-title mb-0" id="messageViewModalLabel">Contact Message Details</h5>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="mb-3 p-3 rounded" style="background: var(--tl-bg-elevated); border: 1px solid var(--tl-border);">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+              <div>
+                <span class="tl-label mb-1 d-block text-muted" style="font-size: 11px;">SENDER</span>
+                <h5 id="modalSenderName" class="fw-bold mb-0 text-primary" style="font-size: 16px;"></h5>
+              </div>
+              <div class="text-end">
+                <span class="tl-label mb-1 d-block text-muted" style="font-size: 11px;">DATE RECEIVED</span>
+                <div id="modalMessageDate" class="tl-metadata" style="font-size: 12.5px;"></div>
+              </div>
+            </div>
+            <div id="modalSenderEmail" class="tl-text-secondary" style="font-size: 13px;"></div>
+          </div>
+
+          <div class="p-4 rounded" style="background: var(--tl-bg-primary); border: 1px solid var(--tl-border-strong); min-height: 140px;">
+            <span class="tl-label d-block mb-2 text-info" style="font-size: 11.5px; letter-spacing: 0.05em;">
+              <i class="bi bi-chat-left-text me-1"></i> MESSAGE CONTENT
+            </span>
+            <div id="modalMessageBody" style="white-space: pre-wrap; line-height: 1.65; font-size: 14px; color: var(--tl-text-primary);"></div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="tl-btn tl-btn--ghost" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core API Modules -->
+  <script src="assets/js/api/api.js"></script>
+  <script src="assets/js/api/auth.js"></script>
+  <script src="assets/js/api/messages.js"></script>
+
+  <!-- Shared App & Pages -->
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/pages/utils.js"></script>
+  <script src="assets/js/pages/messages.js"></script>
+</body>
+
+</html>
